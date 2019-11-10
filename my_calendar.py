@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtCore import QDate
-from PyQt5.QtWidgets import (QWidget, QLabel, QCalendarWidget, QVBoxLayout, QApplication, QInputDialog, QPushButton)
+from PyQt5.QtWidgets import (QWidget, QLabel, QCalendarWidget, QVBoxLayout,
+                             QTextEdit, QApplication, QInputDialog, QPushButton)
 import os
 import pickle
 import time
@@ -30,14 +31,18 @@ class Example(QWidget):
         vbox.addWidget(cal)
 
         self.lbl = QLabel(self)
+        self.textEdit = QTextEdit()
 
         self.date = cal.selectedDate()
+
         self.btn = QPushButton('点击以修改事项', self)
         self.btn.clicked.connect(self.setEvent)
         self.showDate(self.date)
+
         # self.lbl.setText(date.toString())
         vbox.addWidget(self.btn)
         vbox.addWidget(self.lbl)
+        vbox.addWidget(self.textEdit)
 
         self.setLayout(vbox)
 
@@ -54,8 +59,10 @@ class Example(QWidget):
         # print(date.toString("yyyy-MM-dd"))
         if key not in self.data:
             self.lbl.setText("今日无事发生！")
+            self.textEdit.setText("今日无事发生！")
         else:
             self.lbl.setText(self.data[key])
+            self.textEdit.setText(self.data[key])
 
     def setEvent(self):
         # cur_time = time.strftime('%Y-%m-%d', time.localtime())
@@ -72,6 +79,7 @@ class Example(QWidget):
                 pickle.dump(self.data, open(self.data_path, 'wb'))
                 print('save data!')
             self.lbl.setText(self.data[cur_time])
+            self.textEdit.setText(self.data[cur_time])
 
 
 if __name__ == "__main__":
